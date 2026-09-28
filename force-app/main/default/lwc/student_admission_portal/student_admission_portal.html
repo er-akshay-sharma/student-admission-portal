@@ -1,0 +1,66 @@
+<template>
+  <lightning-card title="Student Admission Portal">
+       <div class="slds-p-around_medium">
+
+           <lightning-input label="Student Name" value={student.Name} data-field="Name" onchange={handleChange}></lightning-input>
+
+           <lightning-combobox
+               label="Course"
+               value={student.Course__c}
+               options={courseOptions}
+               data-field="Course__c"
+               onchange={handleChange}>
+           </lightning-combobox>
+
+           <lightning-input type="number" label="Age" value={student.Age__c} data-field="Age__c" onchange={handleChange}></lightning-input>
+
+           <lightning-input type="number" label="Fees" value={student.Fees__c} data-field="Fees__c" onchange={handleChange}></lightning-input>
+
+           <lightning-input type="email" label="Email" value={student.Email__c} data-field="Email__c" onchange={handleChange}></lightning-input>
+
+           <template lwc:if={showCertificate}>
+               <lightning-input type="checkbox" label="Certification Required" checked={student.Certification_Required__c} data-field="Certification_Required__c" onchange={handleCheckbox}></lightning-input>
+           </template>
+
+           <lightning-button label="Save Student" variant="brand" onclick={saveRecord}></lightning-button>
+
+           <template lwc:if={recordId}>
+               <hr />
+
+               <lightning-file-upload
+                   label="Upload Documents"
+                   record-id={recordId}
+                   accept=".pdf,.png,.jpg,.jpeg"
+                   onuploadfinished={handleUpload}>
+               </lightning-file-upload>
+
+               <lightning-button label="Refresh Files" onclick={loadFiles}></lightning-button>
+
+               <template for:each={files} for:item="file">
+                   <p key={file.ContentDocumentId}>
+                       {file.ContentDocument.Title}
+                       <lightning-button
+                           label="Preview"
+                           data-id={file.ContentDocumentId}
+                           onclick={previewFile}>
+                       </lightning-button>
+                   </p>
+               </template>
+           </template>
+
+           <hr />
+
+           <lightning-input type="file" label="Import Students CSV" accept=".csv" onchange={handleCSV}></lightning-input>
+
+           <lightning-button label="Export Students CSV" onclick={exportCSV}></lightning-button>
+
+           <lightning-datatable
+               key-field="Id"
+               data={students}
+               columns={columns}>
+           </lightning-datatable>
+
+       </div>
+   </lightning-card>
+   
+</template>
